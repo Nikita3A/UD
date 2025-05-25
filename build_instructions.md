@@ -51,26 +51,29 @@ pip install -r requirements.txt
 
 ### 2. Using PyInstaller
 
-To create an executable with PyInstaller and bundle FFmpeg:
+To create an executable with PyInstaller and bundle FFmpeg and your application icon:
 
 **If you are using PowerShell (the default terminal in Windows), do NOT use the backslash `\` for line continuation.**  
 Instead, write the command all on one line, like this:
 
 ```powershell
-python -m PyInstaller --onefile --windowed src/UD3.py --add-binary "src/ffmpeg.exe;." --add-binary "src/ffprobe.exe;."
+python -m PyInstaller --onefile --windowed src/UD3.py --icon=src/UD.ico --add-binary "src/ffmpeg.exe;." --add-binary "src/ffprobe.exe;."
 ```
+
+- `--icon=src/UD.ico` sets the application icon (make sure `UD.ico` is in the `src` folder).
 - On Linux/Mac, use `:` instead of `;` in `--add-binary` (e.g., `src/ffmpeg:./`).
 
 **Notes:**
 - `--onefile`: Bundles everything into a single executable.
 - `--windowed`: Hides the console window (for GUI apps).
+- `--icon`: Sets the application icon.
 - `--add-binary`: Bundles the FFmpeg binaries with your app.
 
 The executable will be created in the `dist` directory.
 
 ### 3. Using cx_Freeze
 
-If you prefer cx_Freeze, create a `setup.py` in the `UD` directory:
+If you prefer cx_Freeze, create a `setup.py` in the `UD` directory and specify the icon:
 
 ```python
 # filepath: UD/setup.py
@@ -80,12 +83,13 @@ setup(
     name="yt-downloader",
     version="1.0",
     description="YouTube Downloader Application",
-    executables=[Executable("src/UD3.py", base="Win32GUI")],
+    executables=[Executable("src/UD3.py", base="Win32GUI", icon="src/UD.ico")],
     options={
         "build_exe": {
             "include_files": [
                 ("src/ffmpeg.exe", "ffmpeg.exe"),
                 ("src/ffprobe.exe", "ffprobe.exe"),
+                ("src/UD.ico", "UD.ico"),
             ]
         }
     }
